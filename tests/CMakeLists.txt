@@ -13,6 +13,23 @@ add_definitions(-D_PATH_SSL_CA_FILE=\"${CMAKE_CURRENT_SOURCE_DIR}/../apps/openss
 
 file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} TEST_SOURCE_DIR)
 
+if(DARLING_LIBRESSL_ONLY_TESTS)
+	add_darling_executable(darling_ec_tls_regress
+		darling_ec_tls_regress.c
+	)
+	target_link_libraries(darling_ec_tls_regress
+		crypto44
+	)
+	add_test(
+		NAME darling_ec_tls_regress
+		COMMAND darling_ec_tls_regress
+	)
+	set_tests_properties(darling_ec_tls_regress PROPERTIES
+		LABELS "bead:dar-q95.6;env:host;diag:bare;submod:libressl"
+	)
+	return()
+endif()
+
 # aeadtest
 add_executable(aeadtest aeadtest.c)
 target_link_libraries(aeadtest ${OPENSSL_LIBS})
@@ -471,4 +488,3 @@ if(BUILD_SHARED_LIBS)
 		"${CMAKE_CURRENT_BINARY_DIR}"
 		COMMENT "Copying DLLs for regression tests")
 endif()
-

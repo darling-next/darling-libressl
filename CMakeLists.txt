@@ -692,6 +692,10 @@ target_compile_definitions(crypto44 PRIVATE
 	OPENSSLDIR="/etc/ssl"
 )
 
+target_compile_options(crypto44 PRIVATE
+	-fno-strict-aliasing
+)
+
 target_include_directories(crypto44 PRIVATE
 	crypto
 	crypto/asn1
@@ -899,6 +903,11 @@ target_link_libraries(openssl
 	crypto44
 	ssl46
 )
+
+if (BUILD_TESTING)
+	set(DARLING_LIBRESSL_ONLY_TESTS ON)
+	add_subdirectory(tests)
+endif ()
 
 # install everything
 install(TARGETS crypto44 ssl46 tls18 DESTINATION libexec/darling/usr/lib)
